@@ -13,9 +13,23 @@ Bring your thoughts, code, sketches and little to-dos together in one cozy Windo
 ![Offline notebook](https://img.shields.io/badge/notebook-works_offline-a18abb?style=flat-square)
 ![More updates planned](https://img.shields.io/badge/more_updates-planned-c19a57?style=flat-square)
 
-**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** · **[Latest release](https://github.com/charitha-only/Sara-Note/releases/latest)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
+**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** · **[🌷 All versions](#download-any-version)** · **[Release notes](https://github.com/charitha-only/Sara-Note/releases)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
 
 </div>
+
+## Download any version
+
+Pick a little home for your ideas. **New here? Choose 1.1.1**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
+
+| Version | What's inside | Download size | Windows x64 installer | Details |
+| --- | --- | --- | --- | --- |
+| **🌷 1.1.1 · Recommended** | Clearer text, larger labels and crisp vector icons | 191.7 MiB | **[⬇ Download 1.1.1](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** | [Release notes](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.1) |
+| 🎨 1.1.0 · Archive | Little idea studio, pastel tools, creative cards and templates | 191.7 MiB | [⬇ Download 1.1.0](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.0/CuteNotes-Setup-1.1.0.exe) | [Release notes](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.0) |
+| 🌱 1.0.0 · Archive | The first notebook: notes, code, drawings, tasks and backups | 192.3 MiB | [⬇ Download 1.0.0](https://github.com/charitha-only/Sara-Note/releases/download/v1.0.0/CuteNotes-Setup-1.0.0.exe) | [Release notes](https://github.com/charitha-only/Sara-Note/releases/tag/v1.0.0) |
+
+**[Browse the complete release collection →](https://github.com/charitha-only/Sara-Note/releases)** · Each release includes a **SHA256SUMS.txt** file to verify its installer. More updates are planned. ✨
+
+Older installers are kept here for version history. Back up your notebook before switching versions; opening newer data in an older app has not been verified. For installation, choose the **`.exe`** asset. GitHub's automatic **Source code** archives for 1.0.0 and 1.1.0 are hosting snapshots; exact historical source snapshots were not preserved.
 
 ![A cozy notebook with sample notes and a task list](docs/images/notebook.png)
 
