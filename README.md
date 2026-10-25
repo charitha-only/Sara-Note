@@ -21,11 +21,11 @@ Bring your thoughts, code, sketches and little to-dos together in one cozy Windo
 
 Pick a little home for your ideas. **New here? Choose 1.1.1**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
 
-| Version | What's inside | Download size | Windows x64 installer | Details |
-| --- | --- | --- | --- | --- |
-| **🌷 1.1.1 · Recommended** | Clearer text, larger labels and crisp vector icons | 191.7 MiB | **[⬇ Download 1.1.1](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** | [Release notes](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.1) |
-| 🎨 1.1.0 · Archive | Little idea studio, pastel tools, creative cards and templates | 191.7 MiB | [⬇ Download 1.1.0](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.0/CuteNotes-Setup-1.1.0.exe) | [Release notes](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.0) |
-| 🌱 1.0.0 · Archive | The first notebook: notes, code, drawings, tasks and backups | 192.3 MiB | [⬇ Download 1.0.0](https://github.com/charitha-only/Sara-Note/releases/download/v1.0.0/CuteNotes-Setup-1.0.0.exe) | [Release notes](https://github.com/charitha-only/Sara-Note/releases/tag/v1.0.0) |
+| Version & release notes | Highlights | Windows installer |
+| --- | --- | --- |
+| [🌷 **1.1.1 · Latest**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.1) | Clear text & crisp icons | **[⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** · 191.7 MiB |
+| [🎨 **1.1.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.0) | Creative studio & templates | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.0/CuteNotes-Setup-1.1.0.exe) · 191.7 MiB |
+| [🌱 **1.0.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.0.0) | The original notebook | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.0.0/CuteNotes-Setup-1.0.0.exe) · 192.3 MiB |
 
 **[Browse the complete release collection →](https://github.com/charitha-only/Sara-Note/releases)** · Each release includes a **SHA256SUMS.txt** file to verify its installer. More updates are planned. ✨
 
