@@ -1,0 +1,48 @@
+/* Native-size text and SVG strokes: no image scaling or CSS transforms. */
+:root{font-family:'Segoe UI','Nirmala UI',sans-serif;--muted:#707b70}
+:root[data-theme=dark]{--muted:#b1beb3}
+button svg{width:18px;height:18px;stroke-width:1.8}
+.window-brand{font-size:12px}.brand p{font-size:12px}.brand-mark{transform:none}
+.primary-button,.outline-button,.danger-button{font-size:13px}
+.search-box{height:40px}.search-box input{font-size:12px}.search-box kbd{font-size:10px}
+.navigation button{font-size:13px}.navigation button span{font-size:12px}
+.note-list-heading,.eyebrow{font-size:10px;letter-spacing:1px}
+.note-card strong{font-size:13px}.note-card p{font-size:12px}.note-card small{font-size:11px}
+.local-badge,.sidebar-settings{font-size:12px}.sidebar-settings{gap:8px}
+.workspace-header h2{font-size:22px}.save-badge{font-size:12px}
+.tab{font-size:12px;min-width:140px}.document-breadcrumb,.document-meta{font-size:11px}
+.file-type select,.editor-tools>button{font-size:12px}.editor-status{font-size:11px;gap:12px}
+.task-intro,.progress-label{font-size:12px}.task-form input{font-size:12px}
+.task-item{font-size:12px;padding:12px 8px;gap:7px}.task-check{width:19px;height:19px}
+.task-item .task-check svg{width:15px;height:15px}.task-pin,.task-remove{opacity:.8}
+.task-pin svg,.task-remove svg{width:15px;height:15px}.task-pin.pinned{color:var(--accent-ink)}
+.done-toggle{font-size:11px!important}.desktop-tip strong{font-size:12px}.desktop-tip p,.desktop-tip button{font-size:11px}
+.app-footer{font-size:10px;height:34px;min-height:34px}.app-footer button{font-size:11px}
+.app-footer button svg,.app-footer>span svg{width:14px;height:14px}
+.setting-section h3{font-size:15px}.setting-row strong{font-size:13px}
+.setting-row p,.setting-section .muted,.oauth-details,.oauth-details label,.toggle-row{font-size:12px}
+.setting-row select,.oauth-details input,.segmented button{font-size:12px}
+.small-label,.settings-footer,.connection-badge{font-size:11px}.shortcuts>div,.shortcuts kbd{font-size:12px}
+.sticky-header>span{font-size:12px}.sticky-body .task-form input{font-size:12px}
+.board-top{height:65px;min-height:65px}.board-identity strong{font-size:15px}
+.board-identity>div>span{font-size:11px}.board-beta{display:none}
+.board-export-trigger,.board-export-menu button{font-size:12px;min-height:34px}
+.board-options{min-height:45px;height:45px;gap:12px}.board-swatches{gap:8px}
+.board-swatches>span,.board-paper>span,.board-weight{font-size:11px}
+.board-swatches button{width:17px;height:17px}.board-weight select{font-size:12px;width:63px;padding:4px}
+.board-toolrail{grid-template-columns:repeat(2,57px);gap:5px;padding:8px;border-radius:14px}
+.board-toolrail>button{width:57px;height:53px;gap:5px;color:#566b52;font-weight:600;border-radius:9px}
+.board-toolrail>button>svg{width:23px;height:23px;stroke-width:1.8}
+.board-toolrail>button>span{font-size:10px;letter-spacing:0;line-height:14px}
+.board-toolrail>button.active{background:#d9e7ce;color:#35542f;box-shadow:inset 0 0 0 1px #a4bc95}
+.board-kit-toggle{font-size:12px;padding:10px 13px;color:#796180}
+.kit-heading>span{font-size:10px}.kit-grid strong{font-size:13px}.kit-grid small,.board-kit-panel>p{font-size:11px}
+.kit-grid>button{gap:6px;padding:12px}.board-kit-panel{width:318px}
+.kit-icon svg{width:23px;height:23px}.board-paper button{width:18px;height:18px}
+.board-bottom>div{height:39px}.board-bottom button{padding:7px}.board-bottom button svg{width:18px;height:18px}
+.board-viewport>span{font-size:11px;width:39px}.board-footnote{font-size:10px;height:29px;min-height:29px}
+.board-empty-hint{padding-left:160px}.board-empty-hint>strong{font-size:14px}.board-empty-hint>span{font-size:12px}
+:root[data-theme=dark] .board-toolrail>button{color:#bbcab5}
+:root[data-theme=dark] .board-toolrail>button.active{background:#40593b;color:#e8f1e3}
+:root[data-theme=dark] .board-kit-toggle{color:#d0b8d7}
+@media(max-width:1150px){.save-badge{font-size:11px}.board-options{gap:10px}.board-swatches{gap:7px}.board-weight{font-size:0}.board-paper>span{display:none}.board-bottom{gap:5px}.board-bottom button{padding:6px}.board-footnote>span:last-child{display:none}.note-card strong{max-width:140px}.app-footer>span{display:none}.app-footer>div{width:100%;justify-content:flex-end}.board-empty-hint>strong{font-size:13px}}

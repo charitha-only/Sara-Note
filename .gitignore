@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+../installers/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-*
+google-tokens.bin
+coverage/
