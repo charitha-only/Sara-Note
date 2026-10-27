@@ -1,4 +1,14 @@
-# Sara Note 1.2.0 — verification
+# Sara Note 1.2.1 — verification
+
+## Smaller installer · 27 October 2026
+
+- Installer: 201,041,823 → 128,274,839 bytes (191.7 → 122.3 MiB), a 36.2% reduction. The bundled application archive shrank from 282,274,303 bytes to approximately 19.6 MiB.
+- Frontend libraries remain in the compiled renderer; duplicate dependency sources are excluded by classifying those packages as build dependencies. SQLite remains a runtime dependency, with only `sql-wasm.js` and `sql-wasm.wasm` included from its `dist` folder. All locked dependency versions are unchanged.
+- Maximum installer compression is enabled. All drawing fonts and Electron locale resources remain. Dependency license notices are collected into `licenses/DEPENDENCY-NOTICES.txt` and included in the installed resources.
+- `node scripts/check-package.cjs` passes: only SQLite is installed as a Node runtime package, required SQLite files and drawing fonts are present, notices are included, and packaged main/storage/export/update sources plus the renderer entry point match the tested build.
+- The actual smaller `win-unpacked/Sara Note.exe` passes `test:features`, `test:desktop` and `test:board`. Thirteen storage/service/updater/layer tests pass. The standard interactive installer wizard was not automated.
+
+## Previous feature release: Sara Note 1.2.0
 
 Windows x64 · 27 October 2026.
 

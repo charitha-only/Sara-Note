@@ -9,21 +9,22 @@
 Bring your thoughts, code, sketches and little to-dos together in one cozy Windows workspace.
 
 ![Windows x64](https://img.shields.io/badge/Windows-x64-879e74?style=flat-square&logo=windows&logoColor=white)
-![Version 1.2.0](https://img.shields.io/badge/version-1.2.0-bd8494?style=flat-square)
+![Version 1.2.1](https://img.shields.io/badge/version-1.2.1-bd8494?style=flat-square)
 ![Offline notebook](https://img.shields.io/badge/notebook-works_offline-a18abb?style=flat-square)
 ![More updates planned](https://img.shields.io/badge/more_updates-planned-c19a57?style=flat-square)
 
-**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe)** · **[🌷 All versions](#download-any-version)** · **[Release notes](https://github.com/charitha-only/Sara-Note/releases)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
+**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.1/Sara-Note-Setup-1.2.1.exe)** · **[🌷 All versions](#download-any-version)** · **[Release notes](https://github.com/charitha-only/Sara-Note/releases)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
 
 </div>
 
 ## Download any version
 
-Pick a little home for your ideas. **New here? Choose 1.2.0**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
+Pick a little home for your ideas. **New here? Choose 1.2.1**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
 
 | Version & release notes | Highlights | Windows installer |
 | --- | --- | --- |
-| [🌷 **1.2.0 · Latest**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.2.0) | Colors, themes, layers, PDF/image exports & update alerts | **[⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe)** · 191.7 MiB |
+| [🌷 **1.2.1 · Latest**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.2.1) | All 1.2 features, **36.2% smaller installer** | **[⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.1/Sara-Note-Setup-1.2.1.exe)** · **122.3 MiB** |
+| [🎨 **1.2.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.2.0) | Colors, themes, layers, PDF/image exports & update alerts | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe) · 191.7 MiB |
 | [🌿 **1.1.1**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.1) | Clear text & crisp icons | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe) · 191.7 MiB |
 | [🎨 **1.1.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.0) | Creative studio & templates | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.0/CuteNotes-Setup-1.1.0.exe) · 191.7 MiB |
 | [🌱 **1.0.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.0.0) | The original notebook | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.0.0/CuteNotes-Setup-1.0.0.exe) · 192.3 MiB |
@@ -37,6 +38,8 @@ Older installers are kept here for version history. Back up your notebook before
 > **Now fully Sara Note!** Version 1.2.0 brings the project name into the Windows app, installer and shortcuts. Earlier archived builds still open as CuteNotes. Existing local notes and `.cutenote` backups remain compatible.
 
 ## A fresh little chapter · 1.2.0 🌷
+
+**Latest update · 1.2.1:** the same cozy features now come in a **122.3 MiB** Windows installer, down from **191.7 MiB**. Redundant frontend package copies and unused SQLite debug files were removed, with stronger compression. All drawing fonts, language resources and offline runtime remain bundled; installation needs no additional runtime download. Already using 1.2.0? Reopen the app or check for updates in Settings.
 
 - **Your own color circles:** choose any color using the picker or hex input, start from a curated light palette, and save up to 24 custom colors each for ink, fill and drawing paper.
 - **Gentle workspace themes:** six light themes plus saved custom pastel themes in Settings.
@@ -104,7 +107,7 @@ Optional **Google Drive backup** is available for users who configure their own 
 
 ## Download & settle in
 
-1. **[Download Sara-Note-Setup-1.2.0.exe](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe)** from this project's GitHub release.
+1. **[Download Sara-Note-Setup-1.2.1.exe](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.1/Sara-Note-Setup-1.2.1.exe)** from this project's GitHub release.
 2. Open the installer and choose where to install the app.
 3. Launch **Sara Note** from the desktop or Start menu, and make your first little note.
 
@@ -130,7 +133,7 @@ The current installer is unsigned, so Windows may display an unknown-publisher n
 - [x] Bring the **Sara Note** name into the installed app and installer.
 - [x] Add custom colors, light themes, layers and PDF/image exports.
 - [x] Show update alerts with verified installer downloads.
-- [ ] Make the Windows download smaller while keeping the local experience.
+- [x] Make the Windows download smaller while keeping the local experience: 36.2% smaller in 1.2.1.
 - [ ] Keep improving readability, spacing and the little details of the interface.
 - [ ] Refine the drawing tools and add useful creative extras.
 - [ ] Improve backup setup and everyday reliability.

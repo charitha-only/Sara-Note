@@ -1,13 +1,13 @@
 {
   "name": "sara-note",
-  "version": "1.2.0",
-  "description": "Sara Note \u2014 a cozy offline notebook, creative studio and desktop companion.",
+  "version": "1.2.1",
+  "description": "Sara Note — a cozy offline notebook, creative studio and desktop companion.",
   "author": "Charitha",
   "private": true,
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc --noEmit && vite build && node scripts/assets.cjs",
+    "build": "tsc --noEmit && vite build && node scripts/assets.cjs && node scripts/notices.cjs",
     "start": "electron .",
     "dist": "npm run build && electron-builder --win nsis --x64",
     "test": "node --test tests/*.test.cjs",
@@ -17,6 +17,18 @@
     "test:colors": "node scripts/color-repro.cjs"
   },
   "dependencies": {
+    "sql.js": "^1.13.0"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "electron": "^43.0.0",
+    "electron-builder": "^26.0.12",
+    "playwright": "^1.58.0",
+    "typescript": "^5.9.0",
+    "vite": "^6.4.0",
     "@codemirror/lang-cpp": "^6.0.3",
     "@codemirror/lang-css": "^6.3.1",
     "@codemirror/lang-html": "^6.4.9",
@@ -30,19 +42,7 @@
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sql.js": "^1.13.0",
     "zustand": "^5.0.3"
-  },
-  "devDependencies": {
-    "@types/canvas-confetti": "^1.9.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.7.0",
-    "electron": "^43.0.0",
-    "electron-builder": "^26.0.12",
-    "playwright": "^1.58.0",
-    "typescript": "^5.9.0",
-    "vite": "^6.4.0"
   },
   "build": {
     "appId": "com.cutenotes.desktop",
@@ -55,7 +55,8 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
-      "package.json"
+      "package.json",
+      "!node_modules/sql.js/dist/{sql-asm*,sql-wasm-browser*,sql-wasm-debug*,sql-wasm-inline*,sqljs-*,sqljs-all.zip,sqljs-wasm.zip,sqljs-worker-wasm.zip,worker.*}"
     ],
     "asarUnpack": [
       "node_modules/sql.js/dist/sql-wasm.wasm"
@@ -88,6 +89,7 @@
         "from": "licenses",
         "to": "licenses"
       }
-    ]
+    ],
+    "compression": "maximum"
   }
 }

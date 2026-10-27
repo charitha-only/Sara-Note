@@ -1,0 +1,10 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),asar=require('@electron/asar');
+const archive=path.resolve(__dirname,'../../installers/win-unpacked/resources/app.asar');
+const header=asar.getRawHeader(archive).header;
+assert.deepEqual(Object.keys(header.files.node_modules.files).filter(k=>!k.startsWith('.')),['sql.js']);
+const dist=header.files.node_modules.files['sql.js'].files.dist.files;
+assert.deepEqual(Object.keys(dist).sort(),['sql-wasm.js','sql-wasm.wasm']);
+assert(header.files.dist.files.excalidraw.files.fonts,'Drawing fonts must remain bundled.');
+for(const f of ['electron/main.cjs','electron/storage.cjs','electron/export.cjs','electron/updates.cjs','dist/index.html'])assert(asar.extractFile(archive,f).equals(fs.readFileSync(path.resolve(__dirname,'..',f))),f+' must match the tested source.');
+assert(fs.existsSync(path.resolve(__dirname,'../../installers/win-unpacked/resources/licenses/DEPENDENCY-NOTICES.txt')));
+console.log('PASS: only required SQLite runtime packaged; drawing fonts and dependency notices preserved; packaged code matches final sources.');
