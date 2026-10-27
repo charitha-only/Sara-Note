@@ -4,6 +4,8 @@ const zlib = require('node:zlib');
 const crypto = require('node:crypto');
 const initSqlJs = require('sql.js');
 const LIMIT = 50 * 1024 * 1024;
+function folder(value){if(!value||typeof value!=='object')throw new Error('Invalid folder.');const id=str(value.id,'folder ID',100),name=str(value.name,'folder name',80).normalize('NFC').trim();if(!id||!name)throw new Error('Give your folder a name.');return {id,name};}
+function tags(value){if(!Array.isArray(value)||value.length>20)throw new Error('Use up to 20 tags per note.');return [...new Set(value.map(v=>str(v,'tag',40).normalize('NFC').trim().replace(/^#+/,'').toLowerCase()).filter(Boolean))];}
 function str(value, label, max = 10000000) {
   if (typeof value !== 'string' || value.length > max) throw new Error(`Invalid ${label}.`);
   return value;
@@ -13,6 +15,8 @@ function note(value) {
   const n = {id:str(value.id,'note ID',100),title:str(value.title,'title',300),content:str(value.content,'content'),language:str(value.language || 'markdown','language',30),type:value.type,created_at:str(value.created_at,'date',40),updated_at:str(value.updated_at,'date',40),favorite:value.favorite ? 1 : 0};
   if (!n.id || !n.title.trim() || !['text','canvas'].includes(n.type) || !Number.isFinite(Date.parse(n.created_at)) || !Number.isFinite(Date.parse(n.updated_at))) throw new Error('Invalid note metadata.');
   if (n.type === 'canvas' && n.content) { const scene=JSON.parse(n.content); if (!Array.isArray(scene.elements) || !scene.files || typeof scene.files !== 'object') throw new Error('Invalid whiteboard.'); }
+  if(value.folderId!==undefined)n.folderId=value.folderId===null?null:str(value.folderId,'folder ID',100);
+  if(value.tags!==undefined)n.tags=tags(value.tags);
   return n;
 }
 function todo(value) {
@@ -25,14 +29,18 @@ function decodeBackup(buffer) {
   if (buffer.length > LIMIT) throw new Error('Backup exceeds the 50 MB limit.');
   let data;
   try { data=JSON.parse(zlib.gunzipSync(buffer,{maxOutputLength:LIMIT}).toString('utf8')); } catch { throw new Error('This is not a valid compressed .cutenote backup.'); }
-  if (!['CuteNotes','Sara Note'].includes(data.app) || data.version !== 1 || !Array.isArray(data.payload?.notes) || !Array.isArray(data.payload?.todos)) throw new Error('Unsupported backup format.');
+  if (!['CuteNotes','Sara Note'].includes(data.app) || ![1,2].includes(data.version) || !Array.isArray(data.payload?.notes) || !Array.isArray(data.payload?.todos)) throw new Error('Unsupported backup format.');
   if(data.payload.notes.length > 10000 || data.payload.todos.length > 50000) throw new Error('Backup contains too many items.');
   const notes=data.payload.notes.map(note), todos=data.payload.todos.map(todo);
   if(new Set(notes.map(n=>n.id)).size!==notes.length || new Set(todos.map(t=>t.id)).size!==todos.length) throw new Error('Backup contains duplicate IDs.');
+  if(data.payload.folders!==undefined&&(!Array.isArray(data.payload.folders)||data.payload.folders.length>1000))throw new Error('Invalid backup folders.');
+  const folders=(data.payload.folders||[]).map(folder),ids=new Set(folders.map(f=>f.id)),names=new Set(folders.map(f=>f.name.toLowerCase()));
+  if(ids.size!==folders.length||names.size!==folders.length)throw new Error('Backup contains duplicate folders.');
+  if(notes.some(n=>n.folderId&&!ids.has(n.folderId)))throw new Error('A note references a missing folder.');
   const sticky={};
   if(data.payload.sticky?.text!==undefined)sticky.text=str(data.payload.sticky.text,'sticky text',40000);
   if(data.payload.sticky?.color!==undefined){const color=str(data.payload.sticky.color,'sticky color',7);if(!/^#[a-f0-9]{6}$/i.test(color))throw new Error('Invalid sticky color.');sticky.color=color;}
-  return {notes,todos,sticky};
+  return {notes,todos,sticky,folders};
 }
 async function createStorage(directory) {
   fs.mkdirSync(directory,{recursive:true});
@@ -46,11 +54,16 @@ async function createStorage(directory) {
   } else db=new SQL.Database();
   db.run(`CREATE TABLE IF NOT EXISTS notes(id TEXT PRIMARY KEY,title TEXT NOT NULL,content TEXT NOT NULL,language TEXT NOT NULL,type TEXT NOT NULL CHECK(type IN ('text','canvas')),created_at TEXT NOT NULL,updated_at TEXT NOT NULL,favorite INTEGER NOT NULL DEFAULT 0);
     CREATE TABLE IF NOT EXISTS todos(id TEXT PRIMARY KEY,task TEXT NOT NULL,is_completed INTEGER NOT NULL DEFAULT 0,is_pinned_desktop INTEGER NOT NULL DEFAULT 0,created_at TEXT NOT NULL);
-    CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT NOT NULL);`);
+    CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS folders(id TEXT PRIMARY KEY,name TEXT NOT NULL,name_key TEXT NOT NULL UNIQUE);
+    CREATE TABLE IF NOT EXISTS note_meta(note_id TEXT PRIMARY KEY,folder_id TEXT,tags TEXT NOT NULL DEFAULT '[]');`);
   function persist(){const tmp=filename+'.tmp'; fs.writeFileSync(tmp,db.export()); fs.renameSync(tmp,filename);}
   function rows(sql,params=[]){const s=db.prepare(sql);try{s.bind(params);const a=[];while(s.step())a.push(s.getAsObject());return a;}finally{s.free();}}
   function atomic(fn){const before=db.export();try{db.run('BEGIN');fn();db.run('COMMIT');persist();}catch(e){db.close();db=new SQL.Database(before);throw e;}}
-  function putNote(n){db.run('INSERT OR REPLACE INTO notes VALUES(?,?,?,?,?,?,?,?)',[n.id,n.title,n.content,n.language,n.type,n.created_at,n.updated_at,n.favorite]);}
+  function allNotes(){const meta=new Map(rows('SELECT * FROM note_meta').map(m=>[m.note_id,m]));return rows('SELECT * FROM notes ORDER BY updated_at DESC').map(n=>{const m=meta.get(n.id);return m?{...n,folderId:m.folder_id,tags:JSON.parse(m.tags)}:n;});}
+  function allFolders(){return rows('SELECT id,name FROM folders ORDER BY name_key');}
+  function putFolder(f){db.run('INSERT OR REPLACE INTO folders(id,name,name_key) VALUES(?,?,?)',[f.id,f.name,f.name.toLowerCase()]);}
+  function putNote(n){if(n.folderId&&!rows('SELECT id FROM folders WHERE id=?',[n.folderId]).length)throw new Error('That folder no longer exists. Choose another folder.');db.run('INSERT OR REPLACE INTO notes VALUES(?,?,?,?,?,?,?,?)',[n.id,n.title,n.content,n.language,n.type,n.created_at,n.updated_at,n.favorite]);if(n.folderId!==undefined||n.tags!==undefined)db.run('INSERT OR REPLACE INTO note_meta VALUES(?,?,?)',[n.id,n.folderId||null,JSON.stringify(n.tags||[])]);}
   function putTodo(t){db.run('INSERT OR REPLACE INTO todos VALUES(?,?,?,?,?)',[t.id,t.task,t.is_completed,t.is_pinned_desktop,t.created_at]);}
   if(!rows("SELECT key FROM settings WHERE key='initialized'").length){
     const now=new Date().toISOString();
@@ -59,19 +72,21 @@ async function createStorage(directory) {
   persist();
   return {
     filename,
-    snapshot:()=>({notes:rows('SELECT * FROM notes ORDER BY updated_at DESC'),todos:rows('SELECT * FROM todos ORDER BY created_at'),settings:Object.fromEntries(rows('SELECT * FROM settings').map(s=>[s.key,JSON.parse(s.value)]))}),
+    snapshot:()=>({notes:allNotes(),folders:allFolders(),todos:rows('SELECT * FROM todos ORDER BY created_at'),settings:Object.fromEntries(rows('SELECT * FROM settings').map(s=>[s.key,JSON.parse(s.value)]))}),
+    saveFolder:value=>{const f=folder(value);const duplicate=rows('SELECT id FROM folders WHERE name_key=?',[f.name.toLowerCase()])[0];if(duplicate&&duplicate.id!==f.id)throw new Error('A folder with that name already exists.');if(!duplicate&&allFolders().length>=1000&&!rows('SELECT id FROM folders WHERE id=?',[f.id]).length)throw new Error('You can have up to 1,000 folders.');atomic(()=>putFolder(f));return f;},
+    deleteFolder:id=>{str(id,'folder ID',100);atomic(()=>{db.run('UPDATE note_meta SET folder_id=NULL WHERE folder_id=?',[id]);db.run('DELETE FROM folders WHERE id=?',[id]);});},
     saveNote:value=>{const n=note(value);atomic(()=>putNote(n));return n;},
-    deleteNote:id=>{str(id,'ID',100);atomic(()=>db.run('DELETE FROM notes WHERE id=?',[id]));},
+    deleteNote:id=>{str(id,'ID',100);atomic(()=>{db.run('DELETE FROM notes WHERE id=?',[id]);db.run('DELETE FROM note_meta WHERE note_id=?',[id]);});},
     saveTodo:value=>{const t=todo(value);atomic(()=>putTodo(t));return t;},
     deleteTodo:id=>{str(id,'ID',100);atomic(()=>db.run('DELETE FROM todos WHERE id=?',[id]));},
     setting:(key,value)=>{if(!['fontSize','theme','autoSync','driveClientId','driveClientSecret','lastSync','stickyText','stickyColor','customInks','customFills','customPapers','workspaceColor','lightThemes'].includes(key))throw new Error('Unknown setting.');const json=JSON.stringify(value);str(json,'setting',50000);atomic(()=>db.run('INSERT OR REPLACE INTO settings VALUES(?,?)',[key,json]));},
-    backup:()=>{const settings=Object.fromEntries(rows('SELECT * FROM settings').map(s=>[s.key,JSON.parse(s.value)]));const json=JSON.stringify({app:'Sara Note',version:1,timestamp:new Date().toISOString(),payload:{notes:rows('SELECT * FROM notes'),todos:rows('SELECT * FROM todos'),sticky:{text:settings.stickyText||'',color:settings.stickyColor||'#fff5ce'}}});if(Buffer.byteLength(json)>LIMIT)throw new Error('This notebook exceeds the 50 MB backup limit. Export large notes separately first.');return zlib.gzipSync(json);},
+    backup:()=>{const settings=Object.fromEntries(rows('SELECT * FROM settings').map(s=>[s.key,JSON.parse(s.value)]));const json=JSON.stringify({app:'Sara Note',version:2,timestamp:new Date().toISOString(),payload:{notes:allNotes(),folders:allFolders(),todos:rows('SELECT * FROM todos'),sticky:{text:settings.stickyText||'',color:settings.stickyColor||'#fff5ce'}}});if(Buffer.byteLength(json)>LIMIT)throw new Error('This notebook exceeds the 50 MB backup limit. Export large notes separately first.');return zlib.gzipSync(json);},
     importBackup:(buffer,mode='merge')=>{
       if(!['merge','replace'].includes(mode))throw new Error('Invalid restore mode.');
       const data=decodeBackup(buffer);
       fs.mkdirSync(path.join(directory,'recovery'),{recursive:true});
       fs.writeFileSync(path.join(directory,'recovery',`before-restore-${Date.now()}.sqlite`),db.export());
-      atomic(()=>{if(mode==='replace')db.run('DELETE FROM notes; DELETE FROM todos;');data.notes.forEach(putNote);data.todos.forEach(putTodo);if(data.sticky.text!==undefined)db.run("INSERT OR REPLACE INTO settings VALUES('stickyText',?)",[JSON.stringify(data.sticky.text)]);if(data.sticky.color!==undefined)db.run("INSERT OR REPLACE INTO settings VALUES('stickyColor',?)",[JSON.stringify(data.sticky.color)]);});
+      atomic(()=>{if(mode==='replace')db.run('DELETE FROM note_meta; DELETE FROM notes; DELETE FROM todos; DELETE FROM folders;');const remap=new Map();for(const f of data.folders){const existing=rows('SELECT id FROM folders WHERE name_key=?',[f.name.toLowerCase()])[0];if(existing)remap.set(f.id,existing.id);else if(rows('SELECT id FROM folders WHERE id=?',[f.id]).length){const id=crypto.randomUUID();putFolder({...f,id});remap.set(f.id,id);}else putFolder(f);}if(allFolders().length>1000)throw new Error('The combined notebook would exceed 1,000 folders.');data.notes.forEach(n=>{db.run('DELETE FROM note_meta WHERE note_id=?',[n.id]);putNote({...n,...(n.folderId?{folderId:remap.get(n.folderId)||n.folderId}:{})});});data.todos.forEach(putTodo);if(data.sticky.text!==undefined)db.run("INSERT OR REPLACE INTO settings VALUES('stickyText',?)",[JSON.stringify(data.sticky.text)]);if(data.sticky.color!==undefined)db.run("INSERT OR REPLACE INTO settings VALUES('stickyColor',?)",[JSON.stringify(data.sticky.color)]);});
       return {notes:data.notes.length,todos:data.todos.length};
     },
     close:()=>db.close()

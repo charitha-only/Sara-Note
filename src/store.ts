@@ -1,7 +1,7 @@
 import {create} from 'zustand';
-import type {Note,Todo,Settings} from './types';
+import type {Note,Todo,Settings,Folder} from './types';
 type Notice={text:string;error:boolean;id:number};
-interface State {notes:Note[];todos:Todo[];settings:Settings;active:string|null;tabs:string[];ready:boolean;pending:number;saveError:boolean;notice:Notice|null;init:()=>Promise<void>;refresh:(kind?:string)=>Promise<void>;open:(id:string)=>void;closeTab:(id:string)=>void;newNote:(type?:'text'|'canvas',initial?:Partial<Note>)=>Promise<void>;edit:(id:string,patch:Partial<Note>)=>void;remove:(id:string)=>Promise<void>;todo:(task:string)=>Promise<void>;updateTodo:(t:Todo)=>Promise<void>;removeTodo:(id:string)=>Promise<void>;setting:<K extends keyof Settings>(key:K,value:Settings[K])=>Promise<void>;notify:(text:string,error?:boolean)=>void;}
+interface State {notes:Note[];folders:Folder[];saveFolder:(f:Folder)=>Promise<void>;removeFolder:(id:string)=>Promise<void>;todos:Todo[];settings:Settings;active:string|null;tabs:string[];ready:boolean;pending:number;saveError:boolean;notice:Notice|null;init:()=>Promise<void>;refresh:(kind?:string)=>Promise<void>;open:(id:string)=>void;closeTab:(id:string)=>void;newNote:(type?:'text'|'canvas',initial?:Partial<Note>)=>Promise<void>;edit:(id:string,patch:Partial<Note>)=>void;remove:(id:string)=>Promise<void>;todo:(task:string)=>Promise<void>;updateTodo:(t:Todo)=>Promise<void>;removeTodo:(id:string)=>Promise<void>;setting:<K extends keyof Settings>(key:K,value:Settings[K])=>Promise<void>;notify:(text:string,error?:boolean)=>void;}
 const drafts=new Map<string,Note>();
 const timers=new Map<string,ReturnType<typeof setTimeout>>();
 const running=new Set<Promise<unknown>>();
@@ -20,9 +20,11 @@ export async function flush(){
   if(drafts.size)throw new Error('Some changes could not be saved. Retry saving before closing.');
 }
 export const useStore=create<State>((set,get)=>({
-  notes:[],todos:[],settings:{},active:null,tabs:[],ready:false,pending:0,saveError:false,notice:null,
+  notes:[],folders:[],todos:[],settings:{},active:null,tabs:[],ready:false,pending:0,saveError:false,notice:null,
   init:async()=>{const s=await window.cute.snapshot();const saved=JSON.parse(sessionStorage.getItem('tabs')||'[]') as string[];const tabs=saved.filter(id=>s.notes.some(n=>n.id===id));if(!tabs.length&&s.notes.length)tabs.push(s.notes[0].id);set({...s,tabs,active:tabs[0]||null,ready:true});},
-  refresh:async(kind='all')=>{const s=await window.cute.snapshot();if(kind==='todos')set({todos:s.todos});else if(kind==='settings')set({settings:s.settings});else if(kind==='notes')set({notes:s.notes.map(n=>drafts.get(n.id)||n)});else{const tabs=get().tabs.filter(id=>s.notes.some(n=>n.id===id));if(!tabs.length&&s.notes.length)tabs.push(s.notes[0].id);set({...s,tabs,active:tabs.includes(get().active||'')?get().active:tabs[0]||null});}},
+  refresh:async(kind='all')=>{const s=await window.cute.snapshot();if(kind==='todos')set({todos:s.todos});else if(kind==='settings')set({settings:s.settings});else if(kind==='organization'){const valid=new Set(s.folders.map(f=>f.id));for(const [id,n] of drafts)if(n.folderId&&!valid.has(n.folderId))drafts.set(id,{...n,folderId:null});set({folders:s.folders,notes:s.notes.map(n=>drafts.get(n.id)||n)});}else if(kind==='notes')set({notes:s.notes.map(n=>drafts.get(n.id)||n)});else{const tabs=get().tabs.filter(id=>s.notes.some(n=>n.id===id));if(!tabs.length&&s.notes.length)tabs.push(s.notes[0].id);set({...s,tabs,active:tabs.includes(get().active||'')?get().active:tabs[0]||null});}},
+  saveFolder:async f=>{await track(window.cute.saveFolder(f));await get().refresh('organization');},
+  removeFolder:async id=>{await flush();await track(window.cute.deleteFolder(id));await get().refresh('organization');},
   open:id=>{const tabs=get().tabs.includes(id)?get().tabs:[...get().tabs,id];sessionStorage.setItem('tabs',JSON.stringify(tabs));set({active:id,tabs});},
   closeTab:id=>{const tabs=get().tabs.filter(t=>t!==id);sessionStorage.setItem('tabs',JSON.stringify(tabs));set({tabs,active:get().active===id?tabs[tabs.length-1]||null:get().active});},
   newNote:async(type='text',initial={})=>{await flush();const now=new Date().toISOString();const n:Note={id:crypto.randomUUID(),title:type==='canvas'?'Untitled whiteboard':'Untitled note',content:'',type,language:'markdown',favorite:0,created_at:now,updated_at:now,...initial};await window.cute.saveNote(n);set({notes:[n,...get().notes]});get().open(n.id);},

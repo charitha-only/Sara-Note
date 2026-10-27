@@ -40,6 +40,8 @@ function register(){
   handle('update:check',()=>updater.check());
   handle('update:install',()=>updater.install());
   handle('snapshot',()=>storage.snapshot());
+  handle('folder:save',(e,_w,f)=>{const value=storage.saveFolder(f);markDirty();changed('organization',e.sender.id);return value;});
+  handle('folder:delete',(e,_w,id)=>{storage.deleteFolder(id);markDirty();changed('organization',e.sender.id);});
   handle('note:save',(e,_w,n)=>{const value=storage.saveNote(n);markDirty();changed('notes',e.sender.id);return value;});
   handle('note:delete',(e,_w,id)=>{storage.deleteNote(id);markDirty();changed('notes',e.sender.id);});
   handle('todo:save',(e,_w,t)=>{const value=storage.saveTodo(t);markDirty();changed('todos',e.sender.id);return value;});

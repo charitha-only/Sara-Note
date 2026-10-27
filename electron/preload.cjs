@@ -2,6 +2,7 @@ const {contextBridge,ipcRenderer}=require('electron');
 const invoke=(channel)=>(...args)=>ipcRenderer.invoke(channel,...args);
 contextBridge.exposeInMainWorld('cute',{
   snapshot:invoke('snapshot'),saveNote:invoke('note:save'),deleteNote:invoke('note:delete'),
+  saveFolder:invoke('folder:save'),deleteFolder:invoke('folder:delete'),
   saveTodo:invoke('todo:save'),deleteTodo:invoke('todo:delete'),setting:invoke('setting'),
   exportBackup:invoke('backup:export'),importBackup:invoke('backup:import'),
   exportText:invoke('text:export'),importText:invoke('text:import'),exportImage:invoke('image:export'),

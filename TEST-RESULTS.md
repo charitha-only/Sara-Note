@@ -1,4 +1,15 @@
-# Sara Note 1.2.1 — verification
+# Sara Note 1.3.0 — verification
+
+## Folders and tags · 28 October 2026
+
+- Nineteen storage/service/updater/layer tests pass, including six organization tests: upgrading a real sample 1.2 database and restoring its version-1 backup; folder rename/restart and safe removal; tag normalization/validation; empty folders and same-name folder merging in backups; invalid references leaving the notebook unchanged; and simulated disk-write rollback.
+- The legacy database/backup fixtures contain generated sample data from the released 1.2.1 storage implementation, so migration tests run without Git history or access to a user's notebook.
+- `npm run test:organization` passes against the actual packaged `Sara Note.exe`: folder creation, note assignment/movement, Unicode tags, case-insensitive deduplication, combined filters, new-note filter inheritance, drawing organization, folder rename/removal preserving all notes, tag search, actual backup Replace restore, empty-folder retention, restart and a 950×720 window. No renderer errors were recorded.
+- The packaged executable also passes `test:features`, `test:desktop` and `test:board`. The packaging check still confirms the slim SQLite-only Node runtime, retained fonts/notices and packaged code matching tested sources. The installer is 128,273,409 bytes (122.3 MiB).
+- Database changes are additive: the original eight-column notes table is retained, with separate folders and note metadata tables. New backups use format 2; old format 1 backups remain readable. Versions before 1.3.0 reject the new backup format, preventing silent loss of folder/tag metadata on restore.
+- Native file dialogs use isolated deterministic test paths. The interactive installer wizard and live Google account authorization remain outside automated checks. Installer signing status is unchanged.
+
+## Previous size release: Sara Note 1.2.1
 
 ## Smaller installer · 27 October 2026
 

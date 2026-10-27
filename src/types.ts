@@ -1,11 +1,13 @@
-export interface Note { id:string; title:string; content:string; language:string; type:'text'|'canvas'; favorite:number; created_at:string; updated_at:string }
+export interface Note { id:string; title:string; content:string; language:string; type:'text'|'canvas'; favorite:number; created_at:string; updated_at:string;folderId?:string|null;tags?:string[] }
 export interface Todo { id:string; task:string; is_completed:number; is_pinned_desktop:number; created_at:string }
 export interface Settings {fontSize?:number;theme?:'light'|'dark';autoSync?:boolean;driveClientId?:string;driveClientSecret?:string;lastSync?:string;stickyText?:string;stickyColor?:string;customInks?:string[];customFills?:string[];customPapers?:string[];workspaceColor?:string;lightThemes?:string[]}
-export interface Snapshot {notes:Note[];todos:Todo[];settings:Settings}
+export interface Folder {id:string;name:string}
+export interface Snapshot {notes:Note[];folders:Folder[];todos:Todo[];settings:Settings}
 export interface DriveStatus {connected:boolean;busy:boolean;lastSync:string|null}
 export interface UpdateInfo {current:string;version?:string;available:boolean;url?:string;size?:number}
 export interface CuteAPI {
   snapshot():Promise<Snapshot>; saveNote(n:Note):Promise<Note>;deleteNote(id:string):Promise<void>;
+  saveFolder(f:Folder):Promise<Folder>;deleteFolder(id:string):Promise<void>;
   saveTodo(t:Todo):Promise<Todo>;deleteTodo(id:string):Promise<void>;setting<K extends keyof Settings>(key:K,value:Settings[K]):Promise<void>;
   exportBackup():Promise<string|null>;importBackup():Promise<{notes:number;todos:number}|null>;
   importText():Promise<{title:string;content:string;language:string}|null>;exportText(n:Note):Promise<string|null>;
