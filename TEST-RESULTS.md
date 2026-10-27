@@ -1,4 +1,21 @@
-# CuteNotes 1.1.1 — verification
+# Sara Note 1.2.0 — verification
+
+Windows x64 · 27 October 2026.
+
+- Thirteen automated storage, Drive mock, updater and layer tests pass. Update tests verify numeric version comparison, GitHub download allowlisting, SHA-256 checks before installation, saving before installer launch, rejection of corrupt installers and offline failure. Installer launch/exit uses mocks.
+- The actual Electron feature checks cover Unicode text PDF/PNG/JPEG, drawing PDF/PNG/JPEG/SVG, saved custom Ink/Fill/Paper circles, saved light themes, layer movement with bound labels and Undo, batch PDF export and a startup notice with a mocked newer release.
+- The color regression compares actual canvas pixels with exported PNG pixels. Before the fix, Dark mode showed selected pink paper as RGB (36,26,29), while export produced (252,240,243). After the fix both use (252,240,243). The canvas preserves the original colors independently of the surrounding workspace theme, and exports explicitly include the paper background.
+- A 60-line Unicode note produces a two-page PDF; PDF text extraction confirms the final line is present. Text images support a document height up to 16,000 pixels; longer notes receive a message recommending PDF.
+- A repeated export check generates six full-length 100-line Unicode PNGs and verifies their custom background pixels. Text images use direct rasterization rather than waiting for hidden-window compositor frames. An over-height note reports the PDF alternative without writing a partial file.
+- Existing desktop and custom-board regression suites pass: save/restart, sticky/task synchronization, backup restore, images, templates, embedded SVG fonts, dark workspace and a 950×720 window.
+- The stable installer application ID and original data directory are retained for upgrade compatibility. Old CuteNotes backup markers are accepted; new backups use Sara Note.
+- The final packaged `win-unpacked/Sara Note.exe` passes the full 1.2.0 feature suite. Its main process, export service, update service and built entry point were compared with the final local sources before running it. The NSIS installer contains this packaged application.
+
+Commands: `npm test`, `node scripts/features120.cjs`, `node scripts/color-repro.cjs`, `npm run test:desktop`, `npm run test:board`, `npm run build`.
+
+File dialogs use deterministic isolated paths. Screenshots contain sample data. Live Google authorization and the interactive installer wizard are outside these automated checks. Older builds cannot check for updates: install 1.2.0 once to receive future alerts. Installers remain unsigned.
+
+## Historical verification: CuteNotes 1.1.1
 
 Build target: Windows x64. Verified 25 October 2026.
 

@@ -32,8 +32,8 @@ async function main(){
   await page.bringToFront();await page.keyboard.press('Control+Shift+n');
   await page.getByLabel('Note title',{exact:true}).fill('Drawing test');
   const canvas=page.locator('.excalidraw__canvas.interactive');await canvas.waitFor({timeout:30000});
-  await canvas.click({position:{x:150,y:180}});await page.keyboard.press('r');
-  const bounds=await canvas.boundingBox();await page.mouse.move(bounds.x+150,bounds.y+180);await page.mouse.down();await page.mouse.move(bounds.x+350,bounds.y+300,{steps:10});await page.mouse.up();
+  await page.getByRole('button',{name:'Rectangle tool',exact:true}).click();
+  const bounds=await canvas.boundingBox();await page.mouse.move(bounds.x+250,bounds.y+180);await page.mouse.down();await page.mouse.move(bounds.x+450,bounds.y+300,{steps:10});await page.mouse.up();
   await page.keyboard.press('Control+s');
   await page.waitForFunction(async()=>{const n=(await window.cute.snapshot()).notes.find(n=>n.title==='Drawing test');return n&&JSON.parse(n.content).elements.length>0;},{timeout:15000});
   await page.keyboard.press('t');await canvas.click({position:{x:180,y:220}});await page.keyboard.insertText('Cozy ideas');await page.keyboard.press('Escape');await page.keyboard.press('Control+s');

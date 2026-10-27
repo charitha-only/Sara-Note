@@ -1,0 +1,2 @@
+export const lightColors=['#fffdf9','#fff1f5','#ffe4ec','#fce8df','#fff0db','#fff5cc','#f3f7d4','#e5f1d8','#ddf4e6','#dbf4f1','#dff1fb','#e4eaff','#ede3fa','#f5e3f6','#f3ebe4','#edf0f3'];
+export function lightColor(hex:string){if(!/^#[\da-f]{6}$/i.test(hex))return '#fffdf9';const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));return '#'+rgb.map(n=>Math.round(n*.22+255*.78).toString(16).padStart(2,'0')).join('');}

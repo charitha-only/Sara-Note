@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('cute',{
   saveTodo:invoke('todo:save'),deleteTodo:invoke('todo:delete'),setting:invoke('setting'),
   exportBackup:invoke('backup:export'),importBackup:invoke('backup:import'),
   exportText:invoke('text:export'),importText:invoke('text:import'),exportImage:invoke('image:export'),
+  exportDocument:invoke('document:export'),exportFolder:invoke('export:folder'),checkUpdate:invoke('update:check'),installUpdate:invoke('update:install'),
   sticky:invoke('sticky'),minimize:invoke('minimize'),maximize:invoke('maximize'),close:invoke('close'),
   driveStatus:invoke('drive:status'),driveConnect:invoke('drive:connect'),driveDisconnect:invoke('drive:disconnect'),driveUpload:invoke('drive:upload'),driveRestore:invoke('drive:restore'),
   dataFolder:invoke('data:folder'),flushDone:invoke('flush:done'),

@@ -25,7 +25,7 @@ function decodeBackup(buffer) {
   if (buffer.length > LIMIT) throw new Error('Backup exceeds the 50 MB limit.');
   let data;
   try { data=JSON.parse(zlib.gunzipSync(buffer,{maxOutputLength:LIMIT}).toString('utf8')); } catch { throw new Error('This is not a valid compressed .cutenote backup.'); }
-  if (data.app !== 'CuteNotes' || data.version !== 1 || !Array.isArray(data.payload?.notes) || !Array.isArray(data.payload?.todos)) throw new Error('Unsupported backup format.');
+  if (!['CuteNotes','Sara Note'].includes(data.app) || data.version !== 1 || !Array.isArray(data.payload?.notes) || !Array.isArray(data.payload?.todos)) throw new Error('Unsupported backup format.');
   if(data.payload.notes.length > 10000 || data.payload.todos.length > 50000) throw new Error('Backup contains too many items.');
   const notes=data.payload.notes.map(note), todos=data.payload.todos.map(todo);
   if(new Set(notes.map(n=>n.id)).size!==notes.length || new Set(todos.map(t=>t.id)).size!==todos.length) throw new Error('Backup contains duplicate IDs.');
@@ -54,7 +54,7 @@ async function createStorage(directory) {
   function putTodo(t){db.run('INSERT OR REPLACE INTO todos VALUES(?,?,?,?,?)',[t.id,t.task,t.is_completed,t.is_pinned_desktop,t.created_at]);}
   if(!rows("SELECT key FROM settings WHERE key='initialized'").length){
     const now=new Date().toISOString();
-    atomic(()=>{putNote(note({id:crypto.randomUUID(),title:'A little space for big ideas',content:'# Welcome to CuteNotes ✨\n\nYour thoughts, sketches and little to-dos — together in one cozy place.\n\n## Make yourself at home\n\n• Create a note with the + New note button.\n• Switch languages for code and syntax highlighting.\n• Open a whiteboard to map your next idea.\n• Pin your tasks to keep them on your desktop.\n• Export a .cutenote backup whenever you like.\n\nEverything saves automatically on this computer.\nSinhala works here too: ආයුබෝවන්! 🌿\n\nHappy creating!\n',language:'markdown',type:'text',created_at:now,updated_at:now,favorite:1}));putTodo(todo({id:crypto.randomUUID(),task:'Make a little room for a new idea',created_at:now}));db.run("INSERT INTO settings VALUES('initialized','true')");});
+    atomic(()=>{putNote(note({id:crypto.randomUUID(),title:'A little space for big ideas',content:'# Welcome to Sara Note ✨\n\nYour thoughts, sketches and little to-dos — together in one cozy place.\n\n## Make yourself at home\n\n• Create a note with the + New note button.\n• Switch languages for code and syntax highlighting.\n• Open a whiteboard to map your next idea.\n• Pin your tasks to keep them on your desktop.\n• Export a .cutenote backup whenever you like.\n\nEverything saves automatically on this computer.\nSinhala works here too: ආයුබෝවන්! 🌿\n\nHappy creating!\n',language:'markdown',type:'text',created_at:now,updated_at:now,favorite:1}));putTodo(todo({id:crypto.randomUUID(),task:'Make a little room for a new idea',created_at:now}));db.run("INSERT INTO settings VALUES('initialized','true')");});
   }
   persist();
   return {
@@ -64,8 +64,8 @@ async function createStorage(directory) {
     deleteNote:id=>{str(id,'ID',100);atomic(()=>db.run('DELETE FROM notes WHERE id=?',[id]));},
     saveTodo:value=>{const t=todo(value);atomic(()=>putTodo(t));return t;},
     deleteTodo:id=>{str(id,'ID',100);atomic(()=>db.run('DELETE FROM todos WHERE id=?',[id]));},
-    setting:(key,value)=>{if(!['fontSize','theme','autoSync','driveClientId','driveClientSecret','lastSync','stickyText','stickyColor'].includes(key))throw new Error('Unknown setting.');const json=JSON.stringify(value);str(json,'setting',50000);atomic(()=>db.run('INSERT OR REPLACE INTO settings VALUES(?,?)',[key,json]));},
-    backup:()=>{const settings=Object.fromEntries(rows('SELECT * FROM settings').map(s=>[s.key,JSON.parse(s.value)]));const json=JSON.stringify({app:'CuteNotes',version:1,timestamp:new Date().toISOString(),payload:{notes:rows('SELECT * FROM notes'),todos:rows('SELECT * FROM todos'),sticky:{text:settings.stickyText||'',color:settings.stickyColor||'#fff5ce'}}});if(Buffer.byteLength(json)>LIMIT)throw new Error('This notebook exceeds the 50 MB backup limit. Export large notes separately first.');return zlib.gzipSync(json);},
+    setting:(key,value)=>{if(!['fontSize','theme','autoSync','driveClientId','driveClientSecret','lastSync','stickyText','stickyColor','customInks','customFills','customPapers','workspaceColor','lightThemes'].includes(key))throw new Error('Unknown setting.');const json=JSON.stringify(value);str(json,'setting',50000);atomic(()=>db.run('INSERT OR REPLACE INTO settings VALUES(?,?)',[key,json]));},
+    backup:()=>{const settings=Object.fromEntries(rows('SELECT * FROM settings').map(s=>[s.key,JSON.parse(s.value)]));const json=JSON.stringify({app:'Sara Note',version:1,timestamp:new Date().toISOString(),payload:{notes:rows('SELECT * FROM notes'),todos:rows('SELECT * FROM todos'),sticky:{text:settings.stickyText||'',color:settings.stickyColor||'#fff5ce'}}});if(Buffer.byteLength(json)>LIMIT)throw new Error('This notebook exceeds the 50 MB backup limit. Export large notes separately first.');return zlib.gzipSync(json);},
     importBackup:(buffer,mode='merge')=>{
       if(!['merge','replace'].includes(mode))throw new Error('Invalid restore mode.');
       const data=decodeBackup(buffer);

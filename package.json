@@ -1,8 +1,8 @@
 {
-  "name": "cutenotes",
-  "version": "1.1.1",
-  "description": "A cozy offline notebook, whiteboard and desktop companion.",
-  "author": "CuteNotes",
+  "name": "sara-note",
+  "version": "1.2.0",
+  "description": "Sara Note \u2014 a cozy offline notebook, creative studio and desktop companion.",
+  "author": "Charitha",
   "private": true,
   "main": "electron/main.cjs",
   "scripts": {
@@ -12,7 +12,9 @@
     "dist": "npm run build && electron-builder --win nsis --x64",
     "test": "node --test tests/*.test.cjs",
     "test:desktop": "node scripts/smoke.cjs",
-    "test:board": "node scripts/board-smoke.cjs"
+    "test:board": "node scripts/board-smoke.cjs",
+    "test:features": "node scripts/features120.cjs",
+    "test:colors": "node scripts/color-repro.cjs"
   },
   "dependencies": {
     "@codemirror/lang-cpp": "^6.0.3",
@@ -44,8 +46,8 @@
   },
   "build": {
     "appId": "com.cutenotes.desktop",
-    "productName": "CuteNotes",
-    "artifactName": "CuteNotes-Setup-${version}.${ext}",
+    "productName": "Sara Note",
+    "artifactName": "Sara-Note-Setup-${version}.${ext}",
     "directories": {
       "output": "../installers",
       "buildResources": "build"
@@ -76,7 +78,7 @@
     "fileAssociations": [
       {
         "ext": "cutenote",
-        "name": "CuteNotes Backup",
+        "name": "Sara Note Backup",
         "role": "Editor",
         "icon": "build/icon.ico"
       }

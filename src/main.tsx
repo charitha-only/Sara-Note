@@ -4,6 +4,7 @@ import App from './App';
 import './style.css';
 import './board.css';
 import './readability.css';
+import './personalize.css';
 window.EXCALIDRAW_ASSET_PATH=new URL('./excalidraw/',window.location.href.split('#')[0]).href;
 class ErrorBoundary extends React.Component<{children:React.ReactNode},{error:string|null}> {
   state:{error:string|null}={error:null};

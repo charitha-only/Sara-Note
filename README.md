@@ -9,21 +9,22 @@
 Bring your thoughts, code, sketches and little to-dos together in one cozy Windows workspace.
 
 ![Windows x64](https://img.shields.io/badge/Windows-x64-879e74?style=flat-square&logo=windows&logoColor=white)
-![Version 1.1.1](https://img.shields.io/badge/version-1.1.1-bd8494?style=flat-square)
+![Version 1.2.0](https://img.shields.io/badge/version-1.2.0-bd8494?style=flat-square)
 ![Offline notebook](https://img.shields.io/badge/notebook-works_offline-a18abb?style=flat-square)
 ![More updates planned](https://img.shields.io/badge/more_updates-planned-c19a57?style=flat-square)
 
-**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** · **[🌷 All versions](#download-any-version)** · **[Release notes](https://github.com/charitha-only/Sara-Note/releases)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
+**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe)** · **[🌷 All versions](#download-any-version)** · **[Release notes](https://github.com/charitha-only/Sara-Note/releases)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
 
 </div>
 
 ## Download any version
 
-Pick a little home for your ideas. **New here? Choose 1.1.1**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
+Pick a little home for your ideas. **New here? Choose 1.2.0**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
 
 | Version & release notes | Highlights | Windows installer |
 | --- | --- | --- |
-| [🌷 **1.1.1 · Latest**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.1) | Clear text & crisp icons | **[⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** · 191.7 MiB |
+| [🌷 **1.2.0 · Latest**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.2.0) | Colors, themes, layers, PDF/image exports & update alerts | **[⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe)** · 191.7 MiB |
+| [🌿 **1.1.1**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.1) | Clear text & crisp icons | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe) · 191.7 MiB |
 | [🎨 **1.1.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.0) | Creative studio & templates | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.0/CuteNotes-Setup-1.1.0.exe) · 191.7 MiB |
 | [🌱 **1.0.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.0.0) | The original notebook | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.0.0/CuteNotes-Setup-1.0.0.exe) · 192.3 MiB |
 
@@ -33,7 +34,20 @@ Older installers are kept here for version history. Back up your notebook before
 
 ![A cozy notebook with sample notes and a task list](docs/images/notebook.png)
 
-> **A small note about the name:** this project is called **Sara Note**. The current Windows app still opens as **CuteNotes 1.1.1**. Updating the app's name is planned for a future release.
+> **Now fully Sara Note!** Version 1.2.0 brings the project name into the Windows app, installer and shortcuts. Earlier archived builds still open as CuteNotes. Existing local notes and `.cutenote` backups remain compatible.
+
+## A fresh little chapter · 1.2.0 🌷
+
+- **Your own color circles:** choose any color using the picker or hex input, start from a curated light palette, and save up to 24 custom colors each for ink, fill and drawing paper.
+- **Gentle workspace themes:** six light themes plus saved custom pastel themes in Settings.
+- **Export every kind of note:** text notes and drawings support **PDF, PNG and JPEG**; drawings also support SVG. **Settings → Export your notes** exports every note into a new folder, one file per note. PDFs paginate long text. A single text image can be up to 16,000 pixels high; use PDF for longer notes.
+- **Colors that stay yours:** drawing paper and objects use the chosen colors on screen and in exports, including when the surrounding workspace uses Dark mode.
+- **Bring ideas to the front:** move shapes, circles, images and text backward/forward one layer or to the back/front. Attached labels and grouped templates stay together. Undo supports layer changes.
+- **A hello when an update arrives:** on opening, Sara Note checks this project's latest public GitHub release. Choose **Download & install** to download, verify the SHA-256 checksum, save your work and open the Windows installer. Check manually in Settings too. Updates need internet; local notes keep working offline.
+
+**Coming from 1.1.1 or earlier?** Download and install 1.2.0 once. Older builds have no update checker; alerts work for future releases after installing 1.2.0. Back up your notebook before upgrading. The installer remains unsigned and uses the standard interactive installation wizard.
+
+![Light themes, all-note exports and update settings](docs/images/themes-1.2.0.png)
 
 ## Your thoughts deserve a lovely little home
 
@@ -53,7 +67,7 @@ Choose **Markdown, plain text, JavaScript, TypeScript, Python, C/C++, HTML, CSS 
 
 ### 🎨 Little idea studio
 
-A roomy canvas for the things that are easier to draw than explain. Use the custom CuteNotes pencil case, pastel ink and fill colors, paper colors, shapes, arrows, text, a highlighter and your own images.
+A roomy canvas for the things that are easier to draw than explain. Use the custom Sara Note pencil case, pastel ink and fill colors, paper colors, shapes, arrows, text, a highlighter and your own images.
 
 ![A pastel flowchart created in the drawing studio](docs/images/idea-studio.png)
 
@@ -70,7 +84,7 @@ Open **Little extras** for a small creative boost:
 
 ![The Little extras collection of cards, templates and stamps](docs/images/creative-tools.png)
 
-Double-click card text to make it yours. Duplicate a selection, undo a change, turn on the grid, zoom in, fit the drawing or export it as **PNG or SVG**. SVG exports include the drawing's images and local fonts.
+Double-click card text to make it yours. Duplicate a selection, undo a change, turn on the grid, zoom in, fit the drawing or export it as **PDF, PNG, JPEG or SVG**. SVG exports include the drawing's images and local fonts.
 
 The checklist card is a drawing template. For interactive checkboxes, use the **Little to-dos** panel.
 
@@ -90,9 +104,9 @@ Optional **Google Drive backup** is available for users who configure their own 
 
 ## Download & settle in
 
-1. **[Download CuteNotes-Setup-1.1.1.exe](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe)** from this project's GitHub release.
+1. **[Download Sara-Note-Setup-1.2.0.exe](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe)** from this project's GitHub release.
 2. Open the installer and choose where to install the app.
-3. Launch **CuteNotes** from the desktop or Start menu, and make your first little note.
+3. Launch **Sara Note** from the desktop or Start menu, and make your first little note.
 
 **For Windows 10/11, 64-bit.** The installer includes the app runtime and drawing assets. You do not need to install Node.js, Rust, C++ 2010 or DirectX 9 separately. Installation and the local notebook do not require an internet connection; Google sign-in and cloud backup do.
 
@@ -113,7 +127,9 @@ The current installer is unsigned, so Windows may display an unknown-publisher n
 
 **More updates are planned.** This is the start of Sara Note, and there is room for it to grow with the people who use it.
 
-- [ ] Bring the **Sara Note** name into the installed app and installer.
+- [x] Bring the **Sara Note** name into the installed app and installer.
+- [x] Add custom colors, light themes, layers and PDF/image exports.
+- [x] Show update alerts with verified installer downloads.
 - [ ] Make the Windows download smaller while keeping the local experience.
 - [ ] Keep improving readability, spacing and the little details of the interface.
 - [ ] Refine the drawing tools and add useful creative extras.
