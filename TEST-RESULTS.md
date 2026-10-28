@@ -1,4 +1,16 @@
-# Sara Note 1.3.0 — verification
+# Sara Note 1.4.0 — verification
+
+## Local backups and Note History · 28 October 2026
+
+- Twenty-six automated tests pass. Seven safety tests cover grouped automatic history, restore preserving the current version, checkpoints and per-note retention, opt-out, deleted-note recovery with missing folders, restart, atomic history/disk rollback, unchanged-backup deduplication, seven-copy rotation including equal timestamps, path validation, corruption/failure handling, the global 20 MiB snapshot budget and valid large JSON-escaped notes.
+- `npm run test:safety` passes against the final packaged executable: startup creates a local backup without user action; checkpoint preview and restore preserve the current note; Settings recovers a deleted note; actual local backup restore writes a before-restore copy containing newer work and can undo the restore; drawing history previews render; versions/copies survive restart; no renderer errors occur. Native confirmations use deterministic test choices.
+- The packaged executable also passes `test:organization`, `test:features`, `test:desktop` and `test:board`. The package inspection verifies the final storage and local-backup services, slim SQLite runtime, fonts and notices.
+- A note preview limit of 12 MiB failed a valid seven-million-quote note because JSON escaping doubled its snapshot size. The decompression limit now covers the supported note size, and the regression passes without relaxing note validation.
+- Concurrent main-process flush requests share one pending promise, avoiding competing save acknowledgements between background backup and explicit user actions.
+- New storage is additive. History snapshots are compressed and limited to 30 per note, 2,000 overall and 20 MiB of retained payload. Automatic backups retain up to seven files / 200 MiB in the local `auto-backups` directory; current-notebook exports remain format 2 and exclude timeline/backup collections. Automatic jobs run while the app is open and skip unchanged content.
+- Installer: 128,282,593 bytes (122.3 MiB). Screenshots and tests use isolated sample data. The interactive installer wizard and live Google authorization remain outside automated tests.
+
+## Previous organization release: Sara Note 1.3.0
 
 ## Folders and tags · 28 October 2026
 

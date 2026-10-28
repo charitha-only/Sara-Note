@@ -9,21 +9,22 @@
 Bring your thoughts, code, sketches and little to-dos together in one cozy Windows workspace.
 
 ![Windows x64](https://img.shields.io/badge/Windows-x64-879e74?style=flat-square&logo=windows&logoColor=white)
-![Version 1.3.0](https://img.shields.io/badge/version-1.3.0-bd8494?style=flat-square)
+![Version 1.4.0](https://img.shields.io/badge/version-1.4.0-bd8494?style=flat-square)
 ![Offline notebook](https://img.shields.io/badge/notebook-works_offline-a18abb?style=flat-square)
 ![More updates planned](https://img.shields.io/badge/more_updates-planned-c19a57?style=flat-square)
 
-**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.3.0/Sara-Note-Setup-1.3.0.exe)** · **[🌷 All versions](#download-any-version)** · **[Release notes](https://github.com/charitha-only/Sara-Note/releases)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
+**[⬇ Download for Windows](https://github.com/charitha-only/Sara-Note/releases/download/v1.4.0/Sara-Note-Setup-1.4.0.exe)** · **[🌷 All versions](#download-any-version)** · **[Release notes](https://github.com/charitha-only/Sara-Note/releases)** · **[Share an idea](https://github.com/charitha-only/Sara-Note/issues)**
 
 </div>
 
 ## Download any version
 
-Pick a little home for your ideas. **New here? Choose 1.3.0**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
+Pick a little home for your ideas. **New here? Choose 1.4.0**, our recommended Windows release. Every download below is a complete installer with the app runtime included.
 
 | Version & release notes | Highlights | Windows installer |
 | --- | --- | --- |
-| [🌷 **1.3.0 · Latest**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.3.0) | **Folders & tags**, with the smaller installer | **[⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.3.0/Sara-Note-Setup-1.3.0.exe)** · **122.3 MiB** |
+| [🌷 **1.4.0 · Latest**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.4.0) | **Local auto-backup & Note History** | **[⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.4.0/Sara-Note-Setup-1.4.0.exe)** · **122.3 MiB** |
+| [📂 **1.3.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.3.0) | Folders & tags, with the smaller installer | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.3.0/Sara-Note-Setup-1.3.0.exe) · 122.3 MiB |
 | [🌿 **1.2.1**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.2.1) | All 1.2 features, **36.2% smaller installer** | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.1/Sara-Note-Setup-1.2.1.exe) · 122.3 MiB |
 | [🎨 **1.2.0**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.2.0) | Colors, themes, layers, PDF/image exports & update alerts | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.2.0/Sara-Note-Setup-1.2.0.exe) · 191.7 MiB |
 | [🌿 **1.1.1**](https://github.com/charitha-only/Sara-Note/releases/tag/v1.1.1) | Clear text & crisp icons | [⬇ Download](https://github.com/charitha-only/Sara-Note/releases/download/v1.1.1/CuteNotes-Setup-1.1.1.exe) · 191.7 MiB |
@@ -37,6 +38,22 @@ Older installers are kept here for version history. Back up your notebook before
 ![A cozy notebook with sample notes and a task list](docs/images/notebook.png)
 
 > **Now fully Sara Note!** Version 1.2.0 brings the project name into the Windows app, installer and shortcuts. Earlier archived builds still open as CuteNotes. Existing local notes and `.cutenote` backups remain compatible.
+
+## A little way back · 1.4.0 🌷
+
+Keep creating, with a little room to go back.
+
+- **Note History:** click the history icon beside a note's title to preview earlier text or drawings. Save an explicit **checkpoint** whenever a version matters to you. Restoring a version preserves the current saved note in history first.
+- **Recover a deleted note:** open **Settings → Local safety net → Recover a deleted note**. Recovery is available while that note's saved versions remain within the retention limits.
+- **Local auto-backup:** enabled by default, shortly after opening and every **30 minutes while the app is open**. Unchanged notebooks are skipped. You can also choose **Back up locally now** in Settings.
+- **Undo a notebook restore:** restoring a backup saves a **before-restore copy** first. It appears in the same local list so you can restore it if needed. Restore still asks whether to Merge or Replace.
+- **Bounded storage:** history keeps up to **30 versions per note**, with **2,000 versions / 20 MiB of compressed snapshots** across the notebook. Rapid automatic saves are grouped within a minute. Local backups retain up to **7 copies within 200 MiB**; older copies expire as limits are reached.
+
+History and automatic copies are stored on this computer. Exported `.cutenote` backups contain the **current notebook**, including folders and tags; they do not include the history timeline or the local backup collection. Both automatic features can be turned off in Settings. Existing notes and backup formats remain supported.
+
+![Preview and restore a saved note checkpoint](docs/images/history-1.4.0.png)
+
+![Local automatic backup settings and before-restore copies](docs/images/backups-1.4.0.png)
 
 ## A home for every idea · 1.3.0 🌷
 
@@ -121,7 +138,7 @@ Optional **Google Drive backup** is available for users who configure their own 
 
 ## Download & settle in
 
-1. **[Download Sara-Note-Setup-1.3.0.exe](https://github.com/charitha-only/Sara-Note/releases/download/v1.3.0/Sara-Note-Setup-1.3.0.exe)** from this project's GitHub release.
+1. **[Download Sara-Note-Setup-1.4.0.exe](https://github.com/charitha-only/Sara-Note/releases/download/v1.4.0/Sara-Note-Setup-1.4.0.exe)** from this project's GitHub release.
 2. Open the installer and choose where to install the app.
 3. Launch **Sara Note** from the desktop or Start menu, and make your first little note.
 
@@ -148,6 +165,7 @@ The current installer is unsigned, so Windows may display an unknown-publisher n
 - [x] Add custom colors, light themes, layers and PDF/image exports.
 - [x] Show update alerts with verified installer downloads.
 - [x] Organize notes and drawings with folders, tags and combined filters.
+- [x] Add local automatic backups, note history, checkpoints and deleted-note recovery.
 - [x] Make the Windows download smaller while keeping the local experience: 36.2% smaller in 1.2.1.
 - [ ] Keep improving readability, spacing and the little details of the interface.
 - [ ] Refine the drawing tools and add useful creative extras.

@@ -1,6 +1,6 @@
 {
   "name": "sara-note",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Sara Note \u2014 a cozy offline notebook, creative studio and desktop companion.",
   "author": "Charitha",
   "private": true,
@@ -15,7 +15,8 @@
     "test:board": "node scripts/board-smoke.cjs",
     "test:features": "node scripts/features120.cjs",
     "test:colors": "node scripts/color-repro.cjs",
-    "test:organization": "node scripts/organization-smoke.cjs"
+    "test:organization": "node scripts/organization-smoke.cjs",
+    "test:safety": "node scripts/safety-smoke.cjs"
   },
   "dependencies": {
     "sql.js": "^1.13.0"

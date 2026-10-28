@@ -5,6 +5,6 @@ assert.deepEqual(Object.keys(header.files.node_modules.files).filter(k=>!k.start
 const dist=header.files.node_modules.files['sql.js'].files.dist.files;
 assert.deepEqual(Object.keys(dist).sort(),['sql-wasm.js','sql-wasm.wasm']);
 assert(header.files.dist.files.excalidraw.files.fonts,'Drawing fonts must remain bundled.');
-for(const f of ['electron/main.cjs','electron/storage.cjs','electron/export.cjs','electron/updates.cjs','dist/index.html'])assert(asar.extractFile(archive,f).equals(fs.readFileSync(path.resolve(__dirname,'..',f))),f+' must match the tested source.');
+for(const f of ['electron/main.cjs','electron/storage.cjs','electron/export.cjs','electron/updates.cjs','electron/local-backup.cjs','dist/index.html'])assert(asar.extractFile(archive,f).equals(fs.readFileSync(path.resolve(__dirname,'..',f))),f+' must match the tested source.');
 assert(fs.existsSync(path.resolve(__dirname,'../../installers/win-unpacked/resources/licenses/DEPENDENCY-NOTICES.txt')));
 console.log('PASS: only required SQLite runtime packaged; drawing fonts and dependency notices preserved; packaged code matches final sources.');

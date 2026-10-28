@@ -1,11 +1,15 @@
 export interface Note { id:string; title:string; content:string; language:string; type:'text'|'canvas'; favorite:number; created_at:string; updated_at:string;folderId?:string|null;tags?:string[] }
 export interface Todo { id:string; task:string; is_completed:number; is_pinned_desktop:number; created_at:string }
-export interface Settings {fontSize?:number;theme?:'light'|'dark';autoSync?:boolean;driveClientId?:string;driveClientSecret?:string;lastSync?:string;stickyText?:string;stickyColor?:string;customInks?:string[];customFills?:string[];customPapers?:string[];workspaceColor?:string;lightThemes?:string[]}
+export interface Settings {fontSize?:number;theme?:'light'|'dark';autoSync?:boolean;autoBackup?:boolean;noteHistory?:boolean;driveClientId?:string;driveClientSecret?:string;lastSync?:string;stickyText?:string;stickyColor?:string;customInks?:string[];customFills?:string[];customPapers?:string[];workspaceColor?:string;lightThemes?:string[]}
 export interface Folder {id:string;name:string}
 export interface Snapshot {notes:Note[];folders:Folder[];todos:Todo[];settings:Settings}
 export interface DriveStatus {connected:boolean;busy:boolean;lastSync:string|null}
 export interface UpdateInfo {current:string;version?:string;available:boolean;url?:string;size?:number}
+export interface HistoryEntry {id:string;createdAt:number;title:string;type:'text'|'canvas';reason:string;bytes:number}
+export interface SafetyStatus {backups:{id:string;createdAt:number;bytes:number;beforeRestore:boolean}[];error:string|null;deleted:{noteId:string;title:string;type:string;createdAt:number}[]}
 export interface CuteAPI {
+  historyList(id:string):Promise<HistoryEntry[]>;historyPreview(noteId:string,id:string):Promise<Note>;historyDeleted():Promise<SafetyStatus['deleted']>;historyCheckpoint(id:string):Promise<void>;historyRestore(noteId:string,id:string):Promise<Note|null>;
+  safetyStatus():Promise<SafetyStatus>;safetyBackup():Promise<string|null>;safetyFolder():Promise<void>;safetyRestore(id:string):Promise<unknown>;
   snapshot():Promise<Snapshot>; saveNote(n:Note):Promise<Note>;deleteNote(id:string):Promise<void>;
   saveFolder(f:Folder):Promise<Folder>;deleteFolder(id:string):Promise<void>;
   saveTodo(t:Todo):Promise<Todo>;deleteTodo(id:string):Promise<void>;setting<K extends keyof Settings>(key:K,value:Settings[K]):Promise<void>;

@@ -7,7 +7,7 @@ const {createDrive}=require('./drive.cjs');
 app.setPath('userData',path.join(app.getPath('appData'),'cutenotes'));
 app.setName('Sara Note');
 if(process.env.CUTENOTES_TEST_DATA)app.setPath('userData',path.resolve(process.env.CUTENOTES_TEST_DATA));
-let main,sticky,storage,drive,dirty=false,revision=0,closing=false;
+let main,sticky,storage,drive,localBackup,backupBusy=false,dirty=false,revision=0,closing=false;
 const pendingFlush=new Map();
 const exporter=require('./export.cjs').createExporter();
 const updater=require('./updates.cjs').createUpdater({app,shell,flushAll:()=>Promise.all([flush(main),flush(sticky)])});
@@ -17,7 +17,8 @@ function changed(kind,sender){for(const w of BrowserWindow.getAllWindows())if(w.
 function markDirty(){dirty=true;revision++;}
 function trusted(event){const win=BrowserWindow.fromWebContents(event.sender);const frame=event.senderFrame;if(!win||!frame||frame!==event.sender.mainFrame)throw new Error('Untrusted request.');const expected=require('node:url').pathToFileURL(path.join(__dirname,'../dist/index.html')).href;if(frame.url.split('#')[0]!==expected)throw new Error('Untrusted page.');return win;}
 function handle(channel,fn){ipcMain.handle(channel,async(e,...args)=>{const win=trusted(e);return fn(e,win,...args);});}
-function flush(win){if(!win||win.isDestroyed())return Promise.resolve();return new Promise((resolve,reject)=>{const id=win.webContents.id;const timer=setTimeout(()=>{pendingFlush.delete(id);reject(new Error('Saving is taking too long. Please try again.'));},10000);pendingFlush.set(id,{resolve:()=>{clearTimeout(timer);resolve();},reject:e=>{clearTimeout(timer);reject(e);}});win.webContents.send('flush');});}
+function flush(win){if(!win||win.isDestroyed())return Promise.resolve();const id=win.webContents.id,existing=pendingFlush.get(id);if(existing)return existing.promise;let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});const timer=setTimeout(()=>{pendingFlush.delete(id);reject(new Error('Saving is taking too long. Please try again.'));},10000);pendingFlush.set(id,{promise,resolve:()=>{clearTimeout(timer);resolve();},reject:e=>{clearTimeout(timer);reject(e);}});win.webContents.send('flush');return promise;}
+async function runLocalBackup(force=false){if(backupBusy||closing)return null;backupBusy=true;try{await Promise.all([flush(main),flush(sticky)]);return localBackup.create(force);}finally{backupBusy=false;changed('safety');}}
 function createWindow(isSticky=false){
   let stickyClosing=false;
   const win=new BrowserWindow({width:isSticky?355:1320,height:isSticky?490:850,minWidth:isSticky?300:900,minHeight:isSticky?330:610,frame:false,show:false,backgroundColor:isSticky?'#fff5ce':'#faf9f6',alwaysOnTop:isSticky,icon:path.join(__dirname,'../build/icon.ico'),title:isSticky?'Sara Note · Desktop companion':'Sara Note',webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true,spellcheck:true}});
@@ -32,13 +33,22 @@ function createWindow(isSticky=false){
   });
   return win;
 }
-async function restoreBuffer(buffer,win){const {decodeBackup}=require('./storage.cjs');const data=decodeBackup(buffer);const choice=await dialog.showMessageBox(win,{type:'question',title:'Restore Sara Note backup',message:`Restore ${data.notes.length} notes and ${data.todos.length} tasks?`,detail:'Merge keeps your other notes. Replace restores this backup as your whole notebook. A local recovery copy is saved first.',buttons:['Cancel','Merge','Replace everything'],defaultId:1,cancelId:0});if(!choice.response)return null;await flush(main);await flush(sticky);const result=storage.importBackup(buffer,choice.response===2?'replace':'merge');markDirty();changed('all');return result;}
+async function restoreBuffer(buffer,win){const {decodeBackup}=require('./storage.cjs');const data=decodeBackup(buffer);const choice=await dialog.showMessageBox(win,{type:'question',title:'Restore Sara Note backup',message:`Restore ${data.notes.length} notes and ${data.todos.length} tasks?`,detail:'Merge keeps your other notes. Replace restores this backup as your whole notebook. A local recovery copy is saved first.',buttons:['Cancel','Merge','Replace everything'],defaultId:1,cancelId:0});if(!choice.response)return null;await flush(main);await flush(sticky);localBackup.create(true,true);const result=storage.importBackup(buffer,choice.response===2?'replace':'merge');markDirty();changed('all');return result;}
 async function importPath(filename,win){if(path.extname(filename).toLowerCase()!=='.cutenote')throw new Error('Choose a .cutenote backup.');if(fs.statSync(filename).size>50*1024*1024)throw new Error('Backup exceeds 50 MB.');return restoreBuffer(fs.readFileSync(filename),win);}
 function register(){
   handle('document:export',(_e,w,p,batch)=>exporter.save(w,p,batch));
   handle('export:folder',(_e,w)=>exporter.folder(w));
   handle('update:check',()=>updater.check());
   handle('update:install',()=>updater.install());
+  handle('history:list',(_e,_w,id)=>storage.historyList(id));
+  handle('history:preview',(_e,_w,noteId,id)=>storage.historyPreview(noteId,id));
+  handle('history:deleted',()=>storage.historyDeleted());
+  handle('history:checkpoint',async(_e,_w,id)=>{await flush(main);storage.historyCheckpoint(id);changed('safety');});
+  handle('history:restore',async(_e,w,noteId,id)=>{storage.historyPreview(noteId,id);const choice=await dialog.showMessageBox(w,{type:'question',title:'Restore saved note',message:'Restore this saved version?',detail:'Your current saved version is kept in Note History first. A missing folder becomes Unfiled.',buttons:['Cancel','Restore version'],defaultId:0,cancelId:0});if(choice.response!==1)return null;await flush(main);const note=storage.historyRestore(noteId,id);markDirty();changed('all');changed('safety');return note;});
+  handle('safety:status',()=>({...localBackup.status(),deleted:storage.historyDeleted()}));
+  handle('safety:backup',()=>runLocalBackup(true));
+  handle('safety:folder',()=>{fs.mkdirSync(localBackup.folder,{recursive:true});return shell.openPath(localBackup.folder);});
+  handle('safety:restore',(_e,w,id)=>restoreBuffer(localBackup.read(id),w));
   handle('snapshot',()=>storage.snapshot());
   handle('folder:save',(e,_w,f)=>{const value=storage.saveFolder(f);markDirty();changed('organization',e.sender.id);return value;});
   handle('folder:delete',(e,_w,id)=>{storage.deleteFolder(id);markDirty();changed('organization',e.sender.id);});
@@ -66,7 +76,10 @@ if(single){
     storage=await createStorage(app.getPath('userData'));
     dirty=true;
     drive=createDrive({directory:app.getPath('userData'),storage,safeStorage,shell,onStatus:()=>changed('drive')});
+    localBackup=require('./local-backup.cjs').createLocalBackup({directory:app.getPath('userData'),storage});
     register();Menu.setApplicationMenu(null);main=createWindow();
+    main.webContents.once('did-finish-load',()=>setTimeout(()=>{runLocalBackup().catch(()=>{});},3000).unref());
+    setInterval(()=>{runLocalBackup().catch(()=>{});},30*60*1000).unref();
     const file=process.argv.find(a=>a.toLowerCase().endsWith('.cutenote'));
     if(file)main.webContents.once('did-finish-load',()=>setTimeout(()=>importPath(file,main).catch(e=>dialog.showErrorBox('Could not restore backup',e.message)),1000));
     setInterval(async()=>{if(dirty&&storage.snapshot().settings.autoSync&&drive.status().connected&&!drive.status().busy&&!closing){try{await flush(main);await flush(sticky);const r=revision;await drive.upload();if(r===revision)dirty=false;changed('drive');}catch(e){changed('sync-error:'+e.message);}}},5*60*1000).unref();
